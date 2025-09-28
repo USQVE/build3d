@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { PlayerController, ThirdPersonCameraController, FirstPersonCameraController } from './rosieControls.js';
 import { ObjectCreator } from './objectCreator.js';
 import { WorldData } from './worldData.js';
@@ -29,7 +30,7 @@ export class Worldsmith {
     this.aiAgent = null;
     
     // Asset management
-    this.assetLoader = new THREE.GLTFLoader();
+    this.assetLoader = new GLTFLoader();
     this.loadedAssets = new Map();
     
     // UI state
