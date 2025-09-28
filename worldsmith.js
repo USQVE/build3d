@@ -84,10 +84,10 @@ export class Worldsmith {
     
     // Terrain & Lighting settings
     this.terrainSettings = {
-      brightness: 1.15,
+      brightness: 1.4,
       contrast: 1.0,
       saturation: 1.0,
-      albedoTint: 0xffffff,
+      albedoTint: '#f0f8e8',
       roughness: 0.8,
       normalStrength: 1.0
     };
@@ -225,7 +225,7 @@ export class Worldsmith {
     this.ambientLight = new THREE.AmbientLight(0x404040, this.lightingSettings.ambientIntensity);
     this.scene.add(this.ambientLight);
     
-    // Directional light (sun)
+    this.directionalLight = new THREE.DirectionalLight(0xFFE4B5, 2.0);
     this.directionalLight = new THREE.DirectionalLight(0xFFD8B0, this.lightingSettings.sunIntensity);
     this.directionalLight.position.set(50, 50, 25);
     this.directionalLight.castShadow = true;
@@ -248,7 +248,7 @@ export class Worldsmith {
     // Update fog
     this.scene.fog = new THREE.Fog(this.lightingSettings.fogColor, 50, 200);
     this.scene.fog.density = this.lightingSettings.fogDensity;
-    
+    this.renderer.toneMappingExposure = 1.8;
     this.updateTimeOfDay();
   }
 
