@@ -57,7 +57,6 @@ export class ObjectCreator {
     mesh.userData.type = 'shape';
     mesh.userData.shapeType = shapeType;
     
-    this.scene.add(mesh);
     return mesh;
   }
 
@@ -81,7 +80,6 @@ export class ObjectCreator {
       }
     });
 
-    this.scene.add(clone);
     return clone;
   }
 
@@ -230,7 +228,6 @@ export class ObjectCreator {
       }
     });
     
-    this.scene.add(group);
     return group;
   }
   generateObjectName(description) {

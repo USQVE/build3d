@@ -374,6 +374,7 @@ export class HistoryManager {
   applyCreate(change) {
     const restoredObject = this.restoreObjectFromSnapshot(change.snapshotNew);
     if (restoredObject) {
+      this.worldsmith.scene.add(restoredObject);
       this.worldsmith.createdObjects.push(restoredObject);
     }
   }
@@ -382,6 +383,7 @@ export class HistoryManager {
   reverseDelete(change) {
     const restoredObject = this.restoreObjectFromSnapshot(change.snapshotOld);
     if (restoredObject) {
+      this.worldsmith.scene.add(restoredObject);
       this.worldsmith.createdObjects.push(restoredObject);
     }
   }
