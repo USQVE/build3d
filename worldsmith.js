@@ -161,7 +161,7 @@ export class Worldsmith {
     // Performance settings
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = this.lightingSettings.exposure;
+    this.renderer.toneMappingExposure = 2.2; // Еще ярче
     
     // Shadow settings based on preset
     this.renderer.shadowMap.enabled = true;
@@ -170,7 +170,7 @@ export class Worldsmith {
     
     // WebGL context loss handling
     canvas.addEventListener('webglcontextlost', this.handleContextLost.bind(this));
-    canvas.addEventListener('webglcontextrestored', this.handleContextRestored.bind(this));
+    this.scene.fog = new THREE.Fog(0xf0f8ff, 100, 400); // Светлее и дальше
     
     this.updateRendererSize();
     document.getElementById('gameContainer').appendChild(canvas);
@@ -222,11 +222,11 @@ export class Worldsmith {
 
   setupLighting() {
     // Ambient light
-    this.ambientLight = new THREE.AmbientLight(0x404040, this.lightingSettings.ambientIntensity);
-    this.scene.add(this.ambientLight);
+    this.ambientLight = new THREE.AmbientLight(0x606060, 1.0); // Ярче
+    this.hemisphereLight = new THREE.HemisphereLight(0xb3d9ff, 0xd4b896, 0.8); // Светлее
     
     // Directional light (sun)
-    this.directionalLight = new THREE.DirectionalLight(0xFFD8B0, this.lightingSettings.sunIntensity);
+    this.directionalLight = new THREE.DirectionalLight(0xfff2d9, 2.5); // Еще ярче и теплее
     this.directionalLight.position.set(50, 50, 25);
     this.directionalLight.castShadow = true;
     
@@ -265,11 +265,11 @@ export class Worldsmith {
     
     // Enhanced terrain material
     const groundMaterial = new THREE.MeshStandardMaterial({ 
-      color: new THREE.Color(0x90EE90).multiplyScalar(1.2), // +20% brighter
-      roughness: this.terrainSettings.roughness,
-      transparent: false
+    const groundMaterial = new THREE.MeshStandardMaterial({ 
+      color: 0xc8e6c9, // Светло-зеленый
+      roughness: 0.6,
+      metalness: 0.05
     });
-    
     this.ground = new THREE.Mesh(groundGeometry, groundMaterial);
     this.ground.rotation.x = -Math.PI / 2;
     this.ground.receiveShadow = true;

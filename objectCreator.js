@@ -273,14 +273,14 @@ export class ObjectCreator {
     
     // Table top
     const topGeometry = new THREE.CylinderGeometry(diameter/2, diameter/2, 0.05, 32);
-    const topMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+    const topMaterial = new THREE.MeshLambertMaterial({ color: 0xdeb887 }); // Светлое дерево
     const top = new THREE.Mesh(topGeometry, topMaterial);
     top.position.y = 0.75;
     group.add(top);
     
     // Table legs
     const legGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.75, 8);
-    const legMaterial = new THREE.MeshLambertMaterial({ color: 0x654321 });
+    const legMaterial = new THREE.MeshLambertMaterial({ color: 0xd2b48c }); // Светлее
     
     const legPositions = [
       [diameter/3, 0.375, diameter/3],
@@ -302,21 +302,21 @@ export class ObjectCreator {
     
     // Chair seat
     const seatGeometry = new THREE.BoxGeometry(0.5, 0.05, 0.5);
-    const seatMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+    const seatMaterial = new THREE.MeshLambertMaterial({ color: 0xdeb887 }); // Светлое дерево
     const seat = new THREE.Mesh(seatGeometry, seatMaterial);
     seat.position.y = 0.45;
     group.add(seat);
     
     // Chair back
     const backGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.05);
-    const backMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+    const backMaterial = new THREE.MeshLambertMaterial({ color: 0xdeb887 }); // Светлое дерево
     const back = new THREE.Mesh(backGeometry, backMaterial);
     back.position.set(0, 0.7, -0.225);
     group.add(back);
     
     // Chair legs
     const legGeometry = new THREE.BoxGeometry(0.05, 0.45, 0.05);
-    const legMaterial = new THREE.MeshLambertMaterial({ color: 0x654321 });
+    const legMaterial = new THREE.MeshLambertMaterial({ color: 0xd2b48c }); // Светлее
     
     const legPositions = [
       [0.2, 0.225, 0.2],
@@ -368,7 +368,7 @@ export class ObjectCreator {
 
   createHouseBase() {
     const geometry = new THREE.BoxGeometry(3, 2, 3);
-    const material = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+    const material = new THREE.MeshLambertMaterial({ color: 0xd2b48c }); // Светло-коричневый
     const base = new THREE.Mesh(geometry, material);
     base.position.y = 1;
     base.castShadow = true;
@@ -377,7 +377,7 @@ export class ObjectCreator {
 
   createHouseRoof() {
     const geometry = new THREE.ConeGeometry(2.2, 1.5, 4);
-    const material = new THREE.MeshLambertMaterial({ color: 0x654321 });
+    const material = new THREE.MeshLambertMaterial({ color: 0xa0522d }); // Светлее
     const roof = new THREE.Mesh(geometry, material);
     roof.position.y = 2.75;
     roof.rotation.y = Math.PI / 4;
@@ -387,7 +387,7 @@ export class ObjectCreator {
 
   createTreeTrunk() {
     const geometry = new THREE.CylinderGeometry(0.2, 0.3, 2, 8);
-    const material = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+    const material = new THREE.MeshLambertMaterial({ color: 0xcd853f }); // Светло-коричневый
     const trunk = new THREE.Mesh(geometry, material);
     trunk.position.y = 1;
     trunk.castShadow = true;
@@ -396,7 +396,7 @@ export class ObjectCreator {
 
   createTreeLeaves() {
     const geometry = new THREE.SphereGeometry(1.2, 16, 16);
-    const material = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+    const material = new THREE.MeshLambertMaterial({ color: 0x90ee90 }); // Светло-зеленый
     const leaves = new THREE.Mesh(geometry, material);
     leaves.position.y = 2.5;
     leaves.castShadow = true;
@@ -423,8 +423,8 @@ export class ObjectCreator {
 
   getRandomColor() {
     const colors = [
-      0xff6b6b, 0x4ecdc4, 0x45b7d1, 0xf9ca24, 0xf0932b,
-      0xeb4d4b, 0x6c5ce7, 0xa29bfe, 0xfd79a8, 0x00b894
+      0xffb3ba, 0x7fdbda, 0x87ceeb, 0xfff59d, 0xffcc80,
+      0xff8a80, 0xb39ddb, 0xc5cae9, 0xf8bbd9, 0x80cbc4
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   }
