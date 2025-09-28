@@ -87,21 +87,30 @@ export class ObjectCreator {
     // AI simulation - analyze description and create appropriate object
     const analyzed = this.analyzeDescription(description.toLowerCase());
     
+    let obj = null;
+    
     if (analyzed.assetType) {
-      return this.createAsset(analyzed.assetType);
+      obj = this.createAsset(analyzed.assetType);
     } else if (analyzed.shapeType) {
-      const obj = this.createShape(analyzed.shapeType);
+      obj = this.createShape(analyzed.shapeType);
       if (analyzed.color) {
         obj.material.color.setHex(analyzed.color);
       }
       if (analyzed.scale) {
         obj.scale.setScalar(analyzed.scale);
       }
-      return obj;
     } else {
       // Create complex object based on description
-      return this.createComplexObject(description, analyzed);
+      obj = this.createComplexObject(description, analyzed);
     }
+    
+    // Store description in userData for history
+    if (obj) {
+      obj.userData.description = description;
+      obj.userData.name = this.generateObjectName(description);
+    }
+    
+    return obj;
   }
 
   analyzeDescription(description) {

@@ -239,7 +239,13 @@
       /* Hide UI controls in screenshots */
       .screenshot-mode #uiControls,
       .screenshot-mode #toastContainer,
-      .screenshot-mode #recordingWidget { display: none !important; }
+      .screenshot-mode #recordingWidget,
+      .screenshot-mode #libraryPanel,
+      .screenshot-mode #propertiesPanel,
+      .screenshot-mode #consolePanel,
+      .screenshot-mode #title,
+      .screenshot-mode #performanceStats,
+      .screenshot-mode .edge-tab { display: none !important; }
       /* Low-spec fallback */
       .low-spec #libraryPanel, .low-spec #propertiesPanel, .low-spec #consolePanel{
         backdrop-filter: none; box-shadow: 0 4px 16px rgba(0,0,0,.25);
@@ -283,6 +289,23 @@
         50% { transform: scale(1.02); }
         100% { transform: scale(1); }
       }
+      
+      /* Diagnostics panel */
+      #diagnosticsPanel {
+        position: fixed; bottom: 20px; left: 20px; background: rgba(44,62,80,0.95);
+        color: #fff; padding: 15px; border-radius: 8px; font-size: 11px;
+        font-family: monospace; z-index: 1002; opacity: 0; pointer-events: none;
+        transition: opacity 0.3s ease; max-width: 300px; backdrop-filter: blur(10px);
+      }
+      #diagnosticsPanel.show { opacity: 1; pointer-events: auto; }
+      #diagnosticsPanel h4 { margin: 0 0 10px 0; color: #3498db; font-size: 12px; }
+      .diagnostic-item { margin: 2px 0; }
+      .diagnostic-actions { margin-top: 10px; }
+      .diagnostic-btn { 
+        padding: 4px 8px; margin-right: 5px; background: #3498db; border: none;
+        border-radius: 4px; color: #fff; font-size: 10px; cursor: pointer;
+      }
+      .diagnostic-btn:hover { background: #2980b9; }
     </style>
   </head>
 
@@ -485,6 +508,20 @@
       
       <!-- Toast Container -->
       <div id="toastContainer"></div>
+      
+      <!-- Diagnostics Panel -->
+      <div id="diagnosticsPanel">
+        <h4>🔧 Diagnostics</h4>
+        <div class="diagnostic-item">FPS: <span id="diagFPS">60</span></div>
+        <div class="diagnostic-item">Objects: <span id="diagObjects">0</span></div>
+        <div class="diagnostic-item">Triangles: <span id="diagTriangles">0</span></div>
+        <div class="diagnostic-item">Memory: <span id="diagMemory">0KB</span></div>
+        <div class="diagnostic-item">Preset: <span id="diagPreset">medium</span></div>
+        <div class="diagnostic-actions">
+          <button class="diagnostic-btn" id="copyDiagnosticsBtn">Copy</button>
+          <button class="diagnostic-btn" id="toggleDiagnosticsBtn">Hide</button>
+        </div>
+      </div>
     </div>
 
     <!-- JS -->

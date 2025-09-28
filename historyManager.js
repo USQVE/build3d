@@ -29,13 +29,13 @@ export class HistoryManager {
   setupEventListeners() {
     // Listen for object modifications to track changes
     document.addEventListener('objectCreated', (e) => {
-      if (this.isRecording && !this.isExecutingUndo && !this.isExecutingRedo) {
+      if (this.isRecording && !this.isExecutingUndo && !this.isExecutingRedo && e.detail.object) {
         this.recordObjectCreation(e.detail.object);
       }
     });
 
     document.addEventListener('objectDeleted', (e) => {
-      if (this.isRecording && !this.isExecutingUndo && !this.isExecutingRedo) {
+      if (this.isRecording && !this.isExecutingUndo && !this.isExecutingRedo && e.detail.object) {
         this.recordObjectDeletion(e.detail.object, e.detail.snapshot);
       }
     });
@@ -193,6 +193,7 @@ export class HistoryManager {
 
   // Record object creation
   recordObjectCreation(object) {
+    if (!object) return;
     const snapshot = this.createObjectSnapshot(object);
     this.addChange({
       type: 'create',
@@ -203,6 +204,7 @@ export class HistoryManager {
 
   // Record object deletion
   recordObjectDeletion(object, snapshot = null) {
+    if (!object) return;
     if (!snapshot) {
       snapshot = this.createObjectSnapshot(object);
     }
@@ -456,13 +458,13 @@ export class HistoryManager {
 
     if (undoBtn) {
       undoBtn.disabled = this.undoStack.length === 0;
-      undoBtn.textContent = `↶ Undo${this.undoStack.length > 0 ? `(${this.undoStack.length})` : ''}`;
+      undoBtn.textContent = `↶ Undo${this.undoStack.length > 0 ? ` (${this.undoStack.length})` : ''}`;
       undoBtn.title = this.undoStack.length > 0 ? `Undo: ${this.undoStack[this.undoStack.length - 1].label}` : 'Nothing to undo';
     }
 
     if (redoBtn) {
       redoBtn.disabled = this.redoStack.length === 0;
-      redoBtn.textContent = `↷ Redo${this.redoStack.length > 0 ? `(${this.redoStack.length})` : ''}`;
+      redoBtn.textContent = `↷ Redo${this.redoStack.length > 0 ? ` (${this.redoStack.length})` : ''}`;
       redoBtn.title = this.redoStack.length > 0 ? `Redo: ${this.redoStack[this.redoStack.length - 1].label}` : 'Nothing to redo';
     }
   }
