@@ -1,0 +1,29 @@
+{
+  "name": "worldsmith-enhanced",
+  "version": "2.0.0",
+  "description": "Enhanced AI-powered 3D world creation sandbox with maximum functionality",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "keywords": [
+    "3d",
+    "game",
+    "sandbox",
+    "ai",
+    "three.js",
+    "world-builder",
+    "creative"
+  ],
+  "author": "Worldsmith Team",
+  "license": "MIT"
+}
