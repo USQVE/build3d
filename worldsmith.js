@@ -265,6 +265,8 @@ export class Worldsmith {
     
     // Enhanced terrain material
     const groundMaterial = new THREE.MeshStandardMaterial({ 
+    }
+    )
     const groundMaterial = new THREE.MeshStandardMaterial({ 
       color: 0xc8e6c9, // Светло-зеленый
       roughness: 0.6,
