@@ -70,6 +70,7 @@ export class Worldsmith {
     // Input handling
     this.keys = {};
     this.isInputFocused = false;
+    this.isUIFocused = false;
     this.lastCommandTime = 0;
     this.commandDebounceDelay = 300;
     this.commandQueue = [];
@@ -80,6 +81,36 @@ export class Worldsmith {
     this.weather = 'clear';
     this.ambientLight = null;
     this.directionalLight = null;
+    
+    // Terrain & Lighting settings
+    this.terrainSettings = {
+      brightness: 1.15,
+      contrast: 1.0,
+      saturation: 1.0,
+      albedoTint: 0xffffff,
+      roughness: 0.8,
+      normalStrength: 1.0
+    };
+    
+    this.lightingSettings = {
+      sunIntensity: 1.2,
+      sunElevation: 45,
+      ambientIntensity: 0.6,
+      exposure: 1.25,
+      fogColor: 0x87CEEB,
+      fogDensity: 0.002
+    };
+    
+    // Terrain editing
+    this.terrainEditor = {
+      enabled: false,
+      brushSize: 5,
+      brushStrength: 0.5,
+      brushHardness: 0.8,
+      currentTool: 'raise', // raise, lower, smooth, flatten, paint
+      isEditing: false,
+      editTransaction: null
+    };
     
     // Physics (optional)
     this.physicsEnabled = false;
@@ -130,7 +161,7 @@ export class Worldsmith {
     // Performance settings
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.0;
+    this.renderer.toneMappingExposure = this.lightingSettings.exposure;
     
     // Shadow settings based on preset
     this.renderer.shadowMap.enabled = true;
@@ -191,11 +222,11 @@ export class Worldsmith {
 
   setupLighting() {
     // Ambient light
-    this.ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+    this.ambientLight = new THREE.AmbientLight(0x404040, this.lightingSettings.ambientIntensity);
     this.scene.add(this.ambientLight);
     
     // Directional light (sun)
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    this.directionalLight = new THREE.DirectionalLight(0xFFD8B0, this.lightingSettings.sunIntensity);
     this.directionalLight.position.set(50, 50, 25);
     this.directionalLight.castShadow = true;
     
@@ -214,6 +245,10 @@ export class Worldsmith {
     
     this.scene.add(this.directionalLight);
     
+    // Update fog
+    this.scene.fog = new THREE.Fog(this.lightingSettings.fogColor, 50, 200);
+    this.scene.fog.density = this.lightingSettings.fogDensity;
+    
     this.updateTimeOfDay();
   }
 
@@ -228,8 +263,10 @@ export class Worldsmith {
     groundGeometry.attributes.position.needsUpdate = true;
     groundGeometry.computeVertexNormals();
     
-    const groundMaterial = new THREE.MeshLambertMaterial({ 
-      color: 0x90EE90,
+    // Enhanced terrain material
+    const groundMaterial = new THREE.MeshStandardMaterial({ 
+      color: new THREE.Color(0x90EE90).multiplyScalar(1.2), // +20% brighter
+      roughness: this.terrainSettings.roughness,
       transparent: false
     });
     
@@ -237,6 +274,7 @@ export class Worldsmith {
     this.ground.rotation.x = -Math.PI / 2;
     this.ground.receiveShadow = true;
     this.ground.userData.isGround = true;
+    this.ground.userData.isTerrain = true;
     this.scene.add(this.ground);
   }
 
@@ -440,6 +478,62 @@ export class Worldsmith {
   }
 
   handleKeyDown(e) {
+    // Check if UI is focused (inputs, command palette, etc.)
+    const isCommandPaletteOpen = document.getElementById('commandPalette')?.classList.contains('show');
+    const isConsoleOpen = document.getElementById('consolePanel')?.classList.contains('show');
+    
+    if (this.isUIFocused || isCommandPaletteOpen || isConsoleOpen) {
+      // Only allow certain hotkeys when UI is focused
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.code) {
+          case 'KeyZ':
+            e.preventDefault();
+            if (e.shiftKey) {
+              this.historyManager.redo();
+            } else {
+              this.historyManager.undo();
+            }
+            break;
+          case 'KeyY':
+            e.preventDefault();
+            this.historyManager.redo();
+            break;
+          case 'KeyS':
+            e.preventDefault();
+            this.saveWorld();
+            break;
+          case 'KeyO':
+            e.preventDefault();
+            this.loadWorld();
+            break;
+          case 'KeyK':
+            e.preventDefault();
+            this.toggleCommandPalette();
+            break;
+        }
+      }
+      
+      // Allow F9/F10 but not gameplay keys
+      switch (e.code) {
+        case 'F9':
+          e.preventDefault();
+          this.toggleHUD();
+          break;
+        case 'F10':
+          e.preventDefault();
+          this.toggleImmersiveMode();
+          break;
+        case 'Escape':
+          e.preventDefault();
+          this.handleEscape();
+          break;
+      }
+      
+      // Don't set gameplay keys when UI is focused
+      return;
+    }
+    
+    // Normal gameplay key handling
     this.keys[e.code] = true;
     
     // Prevent browser defaults for our shortcuts
@@ -517,7 +611,10 @@ export class Worldsmith {
   }
 
   handleKeyUp(e) {
-    this.keys[e.code] = false;
+    // Only clear gameplay keys if UI is not focused
+    if (!this.isUIFocused) {
+      this.keys[e.code] = false;
+    }
     
     if (e.code === 'Tab') {
       this.stopTabHold();
