@@ -264,15 +264,12 @@ export class Worldsmith {
     groundGeometry.computeVertexNormals();
     
     // Enhanced terrain material
-    const groundMaterial = new THREE.MeshStandardMaterial({ 
-    }
-    )
-    const groundMaterial = new THREE.MeshStandardMaterial({ 
+    this.groundMaterial = new THREE.MeshStandardMaterial({ 
       color: 0xc8e6c9, // Светло-зеленый
       roughness: 0.6,
       metalness: 0.05
     });
-    this.ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    this.ground = new THREE.Mesh(groundGeometry, this.groundMaterial);
     this.ground.rotation.x = -Math.PI / 2;
     this.ground.receiveShadow = true;
     this.ground.userData.isGround = true;
